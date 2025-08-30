@@ -22,7 +22,16 @@ def main(args):
 
     scaler = torch.cuda.amp.GradScaler()
      
-    device = torch.device("cuda:0" if (torch.cuda.is_available()) else "cpu")
+    # Device selection with MPS support for Apple Silicon
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+        print(f"Using CUDA GPU")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+        print(f"Using Apple Metal Performance Shaders (MPS)")
+    else:
+        device = torch.device("cpu")
+        print(f"Using CPU")
 
     base_folder = time.strftime(args.path_for_outputs, time.localtime())
 
