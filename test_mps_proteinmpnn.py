@@ -490,7 +490,7 @@ class TestProteinMPNNMPS:
                 {"name": "Large", "hidden_dim": 128, "layers": 4},
             ]
             
-            sequence_lengths = [50, 100, 200]
+            sequence_lengths = [50, 100, 200, 400, 600, 800, 1000]
             
             for model_config in model_configs:
                 self.logger.info(f"\nTesting {model_config['name']} model:")
@@ -511,13 +511,13 @@ class TestProteinMPNNMPS:
                 for seq_len in sequence_lengths:
                     self.logger.info(f"  Sequence length: {seq_len}")
                     
-                    # Prepare inputs
-                    batch_size = 1
+                    # Prepare inputs - test with batch size 4 for more realistic comparison
+                    batch_size = 4
                     X = torch.randn(batch_size, seq_len, 4, 3)
                     S = torch.randint(0, 21, (batch_size, seq_len))
                     mask = torch.ones(batch_size, seq_len)
                     chain_M = torch.ones(batch_size, seq_len)
-                    residue_idx = torch.arange(seq_len).unsqueeze(0)
+                    residue_idx = torch.arange(seq_len).unsqueeze(0).repeat(batch_size, 1)
                     chain_encoding_all = torch.zeros(batch_size, seq_len)
                     randn_1 = torch.randn(batch_size, seq_len)
                     
