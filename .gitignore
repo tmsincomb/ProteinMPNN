@@ -157,3 +157,6 @@ pdb_2021aug02/
 pdb_2025sep09/
 pdb_2021aug02-2025sep08/
 pdb_2025sep09_correct/
+
+*.md
+*tar.gz
