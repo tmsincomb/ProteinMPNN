@@ -1131,8 +1131,8 @@ class ProteinMPNN(nn.Module):
         h_S = torch.zeros_like(h_V, device=device)
         S = torch.zeros((N_batch, N_nodes), dtype=torch.int64, device=device)
         h_V_stack = [h_V] + [torch.zeros_like(h_V, device=device) for _ in range(len(self.decoder_layers))]
-        constant = torch.tensor(omit_AAs_np, device=device)
-        constant_bias = torch.tensor(bias_AAs_np, device=device)
+        constant = torch.tensor(omit_AAs_np, device=device, dtype=torch.float32)
+        constant_bias = torch.tensor(bias_AAs_np, device=device, dtype=torch.float32)
         #chain_mask_combined = chain_mask*chain_M_pos 
         omit_AA_mask_flag = omit_AA_mask != None
 
@@ -1228,8 +1228,8 @@ class ProteinMPNN(nn.Module):
         h_S = torch.zeros_like(h_V, device=device)
         S = torch.zeros((N_batch, N_nodes), dtype=torch.int64, device=device)
         h_V_stack = [h_V] + [torch.zeros_like(h_V, device=device) for _ in range(len(self.decoder_layers))]
-        constant = torch.tensor(omit_AAs_np, device=device)
-        constant_bias = torch.tensor(bias_AAs_np, device=device)
+        constant = torch.tensor(omit_AAs_np, device=device, dtype=torch.float32)
+        constant_bias = torch.tensor(bias_AAs_np, device=device, dtype=torch.float32)
         omit_AA_mask_flag = omit_AA_mask != None
 
         h_EX_encoder = cat_neighbors_nodes(torch.zeros_like(h_S), h_E, E_idx)

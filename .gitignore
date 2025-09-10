@@ -127,3 +127,33 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Large datasets
+pdb_*/
+rcsb_*/
+
+# Test outputs
+test_*/
+*_test/
+*_output/
+!test_train.py         # Exception - keep this file
+!test_mps_proteinmpnn.py  # Exception - keep this file
+
+# Temporary files
+*.tmp
+fix_*.py
+merge_*.py
+smart_*.py
+!merge_pdb_datasets.py  # Exception - keep this file
+!smart_merge_datasets.py  # Exception - keep this file
+
+# Training outputs
+outputs/
+production_output/
+test_train_output/
+
+# Local data (if keeping pdb_2021aug02 locally but not committing)
+pdb_2021aug02/
+pdb_2025sep09/
+pdb_2021aug02-2025sep08/
+pdb_2025sep09_correct/
