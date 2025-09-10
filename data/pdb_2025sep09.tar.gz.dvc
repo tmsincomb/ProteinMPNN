@@ -1,0 +1,10 @@
+md5: 8fe184f4dfd8dd65f952e5679051626b
+frozen: true
+deps:
+- etag: a8496fde1b411fb7437eaf0b584f6315-2160
+  size: 18114615628
+  hash: md5
+  path: s3://proteinmpnntrainingsets/pdb_2025sep09.tar.gz
+outs:
+- hash: md5
+  path: pdb_2025sep09.tar.gz
