@@ -161,4 +161,5 @@ pdb_2025sep09_correct/
 *.md
 rcsb_2021aug02-2025sep08.tar.gz
 *.tar.gz
-*.tar.xz
+*.tar.xz*.tar.gz
+*.localcopy
