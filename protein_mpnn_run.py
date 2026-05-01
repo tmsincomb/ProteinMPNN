@@ -164,7 +164,7 @@ def main(args):
 
     if print_all: 
         print(40*'-')
-    bias_AAs_np = np.zeros(len(alphabet))
+    bias_AAs_np = np.zeros(len(alphabet), dtype=np.float32)
     if bias_AA_dict:
             for n, AA in enumerate(alphabet):
                     if AA in list(bias_AA_dict.keys()):
@@ -236,6 +236,8 @@ def main(args):
     with torch.no_grad():
         test_sum, test_weights = 0., 0.
         for ix, protein in enumerate(dataset_valid):
+            if device.type == "mps":
+                torch.mps.empty_cache()
             score_list = []
             global_score_list = []
             all_probs_list = []
