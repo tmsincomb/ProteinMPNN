@@ -7,25 +7,26 @@ porting MMseqs2 to MPS, see [MMseqs2_MPS_Feasibility_Analysis.md](MMseqs2_MPS_Fe
 ## Status
 
 - **Inference (`protein_mpnn_run.py`)** — works end-to-end on M-series Macs. Verified on M4 Max with PyTorch 2.2.2 against `inputs/PDB_monomers/pdbs/6MRR.pdb`: 2 sequences of length 68 generated in 2.6 s on the GPU.
-- **Device priority** — `cuda → mps → cpu`. No flag needed; device is auto-selected at [protein_mpnn_run.py:68-77](../../protein_mpnn_run.py).
+- **Device priority** — `cuda → mps → cpu`. No flag needed; device is auto-selected at [protein_mpnn_run.py:68-88](../../protein_mpnn_run.py). MPS branch is gated on `platform.system() == "Darwin" and platform.machine() == "arm64" and torch.backends.mps.is_available()`.
 - **Training (`training/training.py`)** — same auto-selection, but not exercised by the smoke test in this repo. Treat as untested on MPS.
 
 ## How to run
 
-Use the wrapper at the repo root:
+Invoke the runner directly:
 
 ```bash
-./run_mpnn_mps.sh \
+python protein_mpnn_run.py \
     --pdb_path inputs/PDB_monomers/pdbs/6MRR.pdb \
     --out_folder outputs/test \
     --num_seq_per_target 8
 ```
 
-The wrapper sets the env vars described below before invoking
-`protein_mpnn_run.py`. You can also export them yourself and call
-`python protein_mpnn_run.py` directly.
+The three MPS env vars below are auto-set inside `protein_mpnn_run.py` (and
+`training/training.py`) when running on Apple Silicon. Export your own values
+beforehand to override — the runner uses `os.environ.setdefault`, so any
+value you set in the parent shell wins.
 
-## Required environment variables
+## Environment variables (auto-set on Apple Silicon; override by exporting)
 
 | Variable | Why |
 |---|---|
@@ -36,7 +37,7 @@ The wrapper sets the env vars described below before invoking
 ## Allocator hygiene
 
 `protein_mpnn_run.py` calls `torch.mps.empty_cache()` at the top of the outer
-protein loop ([protein_mpnn_run.py:238-240](../../protein_mpnn_run.py)). This
+protein loop ([protein_mpnn_run.py:249-250](../../protein_mpnn_run.py)). This
 prevents the MPS allocator from accumulating tensors across batches, which
 would otherwise cause progressive slowdown and eventual OOM during long runs.
 The call is guarded so the CUDA and CPU paths are unaffected.
@@ -100,9 +101,8 @@ Use `--max_length` to bound sequence length when iterating across a dataset.
 
 ## See also
 
-- [protein_mpnn_run.py](../../protein_mpnn_run.py) — main inference script (device selection, allocator reset)
+- [protein_mpnn_run.py](../../protein_mpnn_run.py) — main inference script (device selection, allocator reset, env-var auto-set)
 - [protein_mpnn_utils.py](../../protein_mpnn_utils.py) — model definition (all standard PyTorch ops)
-- [run_mpnn_mps.sh](../../run_mpnn_mps.sh) — Apple Silicon launcher with required env vars
 - [test_mps.py](../../test_mps.py) — MPS availability check
 - [test_mps_e2e.py](../../test_mps_e2e.py) — end-to-end smoke test on a real PDB
 - [benchmark_mps_cpu.py](../../benchmark_mps_cpu.py) — CPU-vs-MPS micro-benchmark

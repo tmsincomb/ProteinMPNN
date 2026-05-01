@@ -2,7 +2,7 @@ import argparse
 import os.path
 
 def main(args):
-    import json, time, os, sys, glob
+    import json, time, os, sys, glob, platform
     import shutil
     import warnings
     import numpy as np
@@ -22,11 +22,21 @@ def main(args):
 
     scaler = torch.cuda.amp.GradScaler()
      
-    # Device selection with MPS support for Apple Silicon
+    # Device selection: CUDA > MPS (Apple Silicon only) > CPU.
+    # MPS is gated on Darwin + arm64 + torch availability so non-Apple hosts
+    # never enter the MPS branch even on misconfigured torch builds.
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
         print(f"Using CUDA GPU")
-    elif torch.backends.mps.is_available():
+    elif (
+        platform.system() == "Darwin"
+        and platform.machine() == "arm64"
+        and torch.backends.mps.is_available()
+    ):
+        # setdefault preserves any user-exported overrides.
+        os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
+        os.environ.setdefault("PYTORCH_MPS_HIGH_WATERMARK_RATIO", "0.0")
+        os.environ.setdefault("PYTORCH_MPS_LOW_WATERMARK_RATIO", "0.0")
         device = torch.device("mps")
         print(f"Using Apple Metal Performance Shaders (MPS)")
     else:
