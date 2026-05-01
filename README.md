@@ -1,6 +1,60 @@
-# ProteinMPNN
+# ProteinMPNN (MPS Fork)
+
+> **Unofficial fork** of [dauparas/ProteinMPNN](https://github.com/dauparas/ProteinMPNN) with Apple Silicon (MPS) support, packaged for `pip install`. Original work © Justas Dauparas et al., Baker Lab. Released under MIT.
+
 ![ProteinMPNN](https://docs.google.com/drawings/d/e/2PACX-1vTtnMBDOq8TpHIctUfGN8Vl32x5ISNcPKlxjcQJF2q70PlaH2uFlj2Ac4s3khnZqG1YxppdMr0iTyk-/pub?w=889&h=358)
 Read [ProteinMPNN paper](https://www.biorxiv.org/content/10.1101/2022.06.03.494563v1).
+
+## Install
+
+```bash
+# From PyPI
+pip install proteinmpnn-mps
+
+# Latest dev (from this fork)
+pip install git+https://github.com/tmsincomb/ProteinMPNN.git
+
+# With helper-script extras (Biopython, for cif_to_pdb.py)
+pip install "proteinmpnn-mps[helpers]"
+
+# With training extras (pandas, psutil)
+pip install "proteinmpnn-mps[training]"
+```
+
+After install, the runner is available as a console command:
+
+```bash
+proteinmpnn --pdb_path input.pdb --out_folder ./out --num_seq_per_target 2
+```
+
+It also still works as a script: `python protein_mpnn_run.py ...`.
+
+### Apple Silicon (MPS)
+
+This fork auto-selects the MPS backend on Apple Silicon Macs (CUDA > MPS > CPU). Requires PyTorch ≥ 1.12 and macOS ≥ 12.3. See [docs/mps/ProteinMPNN_MPS_Notes.md](docs/mps/ProteinMPNN_MPS_Notes.md) for performance notes, environment variables, and known gotchas.
+
+### Releasing a new version (maintainer)
+
+Releases are published to PyPI via GitHub Actions ([.github/workflows/publish.yml](.github/workflows/publish.yml)) using PyPI Trusted Publishing (OIDC) — no API tokens stored in the repo.
+
+One-time setup:
+1. Register `proteinmpnn-mps` on PyPI (upload first build manually, or pre-register).
+2. On PyPI → project → Settings → Publishing → Add a new pending publisher:
+   - Owner: `tmsincomb`
+   - Repository: `ProteinMPNN`
+   - Workflow: `publish.yml`
+   - Environment: `pypi`
+3. In GitHub repo Settings → Environments → New environment named `pypi`.
+
+Per-release:
+```bash
+# bump version in pyproject.toml, commit, then:
+git tag v1.0.1.mps1
+git push origin v1.0.1.mps1
+```
+Tag push triggers the workflow → builds sdist+wheel → publishes to PyPI.
+
+### Manual conda install (alternative)
 
 To run ProteinMPNN clone this github repo and install Python>=3.0, PyTorch, Numpy. 
 

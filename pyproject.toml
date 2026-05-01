@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proteinmpnn-mps"
+version = "1.0.1"
+description = "Unofficial fork of ProteinMPNN (Dauparas et al., Science 2022) with Apple Silicon (MPS) support"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [
+    { name = "Justas Dauparas et al. (Baker Lab)" },
+]
+maintainers = [
+    { name = "Troy Sincomb", email = "troysincomb@gmail.com" },
+]
+keywords = ["protein-design", "deep-learning", "mpnn", "apple-silicon", "mps", "structural-biology"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=1.12",
+    "numpy",
+    "scipy",
+]
+
+[project.optional-dependencies]
+helpers = ["biopython"]
+training = ["pandas", "psutil"]
+dev = ["pytest", "build", "twine"]
+
+[project.urls]
+Homepage = "https://github.com/tmsincomb/ProteinMPNN"
+Upstream = "https://github.com/dauparas/ProteinMPNN"
+Issues = "https://github.com/tmsincomb/ProteinMPNN/issues"
+
+[project.scripts]
+proteinmpnn = "protein_mpnn_run:cli"
+
+[tool.setuptools]
+py-modules = ["protein_mpnn_run", "protein_mpnn_utils"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "helper_scripts*",
+    "vanilla_model_weights*",
+    "soluble_model_weights*",
+    "ca_model_weights*",
+]
+
+[tool.setuptools.package-data]
+vanilla_model_weights = ["*.pt"]
+soluble_model_weights = ["*.pt", "*.csv"]
+ca_model_weights = ["*.pt"]
