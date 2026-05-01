@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proteinmpnn-mps"
-version = "1.0.1"
+version = "1.0.2"
 description = "Unofficial fork of ProteinMPNN (Dauparas et al., Science 2022) with Apple Silicon (MPS) support"
 readme = "README.md"
 license = { file = "LICENSE" }
