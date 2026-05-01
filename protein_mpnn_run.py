@@ -236,6 +236,8 @@ def main(args):
     with torch.no_grad():
         test_sum, test_weights = 0., 0.
         for ix, protein in enumerate(dataset_valid):
+            if device.type == "mps":
+                torch.mps.empty_cache()
             score_list = []
             global_score_list = []
             all_probs_list = []
