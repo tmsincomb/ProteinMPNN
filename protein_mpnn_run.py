@@ -164,7 +164,7 @@ def main(args):
 
     if print_all: 
         print(40*'-')
-    bias_AAs_np = np.zeros(len(alphabet))
+    bias_AAs_np = np.zeros(len(alphabet), dtype=np.float32)
     if bias_AA_dict:
             for n, AA in enumerate(alphabet):
                     if AA in list(bias_AA_dict.keys()):
