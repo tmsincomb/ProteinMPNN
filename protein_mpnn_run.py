@@ -436,7 +436,7 @@ def main(args):
                 if print_all:
                     print(f'{num_seqs} sequences of length {total_length} generated in {dt} seconds')
    
-if __name__ == "__main__":
+def cli():
     argparser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     argparser.add_argument("--suppress_print", type=int, default=0, help="0 for False, 1 for True")
@@ -486,5 +486,9 @@ if __name__ == "__main__":
     
     argparser.add_argument("--tied_positions_jsonl", type=str, default='', help="Path to a dictionary with tied positions")
     
-    args = argparser.parse_args()    
-    main(args)   
+    args = argparser.parse_args()
+    main(args)
+
+
+if __name__ == "__main__":
+    cli()
